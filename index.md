@@ -33,3 +33,9 @@
 **message**
 
 [ExoPlayerImpl](/ExoPlayerImpl.md/)
+
+
+## 解码,渲染
+[MediaCodecVideoRenderer](/video/MediaCodecVideoRenderer.md)
+
+
