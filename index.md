@@ -1,4 +1,4 @@
-![ExoPlayer_UML](/images/ExoPlayer_UML.png)
+![ExoPlayer_UML](/images/ExoPlayer_UML.png?style=centerme)
 
 ![ExoPlayer_Class](/images/ExoPlayer.png)
 
