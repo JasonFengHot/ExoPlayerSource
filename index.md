@@ -1,6 +1,6 @@
-![ExoPlayer_UML](/images/ExoPlayer_UML.png?style=centerme)
+![ExoPlayer_UML](/images/ExoPlayer_UML.png)
 
-![ExoPlayer_Class](/images/ExoPlayer.png?style=centerme)
+![ExoPlayer_Class](/images/ExoPlayer.png)
 
 ### EventListener 播放器时间回调
 
@@ -32,4 +32,4 @@
 
 **message**
 
-[具体实现](/ExoPlayerImpl.md)
+[具体实现!](/ExoPlayerImpl.md)
