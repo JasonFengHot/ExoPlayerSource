@@ -1,6 +1,6 @@
-![GitHub Logo](/images/ExoPlayer_UML.png)
+![ExoPlayer_UML](/images/ExoPlayer_UML.png?style=centerme)
 
-![GitHub Logo](/images/ExoPlayer.png)
+![ExoPlayer_Class](/images/ExoPlayer.png?style=centerme)
 
 ### EventListener 播放器时间回调
 
