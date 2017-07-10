@@ -1,3 +1,8 @@
-![ExoPlayer_Class](/images/ExoPlayer.png)
+![ExoPlayerImpl_field](/images/ExoPlayerImpl_field.png)
 
-![ExoPlayer_Class](/images/ExoPlayer.png)
+![ExoPlayerImpl_method](/images/ExoPlayerImpl_method.png)
+
+
+
+
+
