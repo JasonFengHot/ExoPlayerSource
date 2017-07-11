@@ -124,7 +124,7 @@ Compute how many microseconds it is until the buffer's presentation time.
 时间超过30ms丢弃
 
 
-```
+```java
     if (Util.SDK_INT >= 21) {
       // Let the underlying framework time the release.
       if (earlyUs < 50000) {
