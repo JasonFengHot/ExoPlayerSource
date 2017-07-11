@@ -16,16 +16,16 @@ crop-top | 裁剪上侧
 
 ![processOutputBuffer](../images/MediaCodecVideoRenderer_processOutputBuffer.png)
 
-```
+界面不渲染这段数据
+```java
     if (shouldSkip) {
       skipOutputBuffer(codec, bufferIndex);
       return true;
     }
 ```
 
-界面不渲染这段数据
-
-```
+渲染第一帧视频
+```java
     if (!renderedFirstFrame) {
       if (Util.SDK_INT >= 21) {
         renderOutputBufferV21(codec, bufferIndex, System.nanoTime());
@@ -35,8 +35,6 @@ crop-top | 裁剪上侧
       return true;
     }
 ```
-
-渲染第一帧视频
 
 ##### TargetApi < 21
 
@@ -82,27 +80,24 @@ renderTimestampNs	long: The timestamp to associate with this buffer when it is s
 
 在渲染第一帧的时候，Api21之前和之后有些区别
 
+计算从视频解码到图像呈现一共花了多长时间
 
 `long elapsedSinceStartOfLoopUs = (SystemClock.elapsedRealtime() * 1000) - elapsedRealtimeUs;`
 
 Compute how many microseconds it is until the buffer's presentation time.
 
-计算从视频解码到图像呈现一共花了多长时间
+用pts减去当前视频位置，再减去解码花的时间
 
 `long earlyUs = bufferPresentationTimeUs - positionUs - elapsedSinceStartOfLoopUs;`
 
-用pts减去当前视频位置，再减去解码花的时间
-
-
+视频图像呈现的时间
 ```
     // Compute the buffer's desired release time in nanoseconds.
     long systemTimeNs = System.nanoTime();
     long unadjustedFrameReleaseTimeNs = systemTimeNs + (earlyUs * 1000);
 ```
 
-视频图像呈现的时间
-
-
+对时间矫正
 ```
     // Apply a timestamp adjustment, if there is one.
     long adjustedReleaseTimeNs = frameReleaseTimeHelper.adjustReleaseTime(
@@ -110,9 +105,7 @@ Compute how many microseconds it is until the buffer's presentation time.
     earlyUs = (adjustedReleaseTimeNs - systemTimeNs) / 1000;
 ```
 
-对时间矫正
-
-
+时间超过30ms丢弃
 ```
     if (shouldDropOutputBuffer(earlyUs, elapsedRealtimeUs)) {
       // We're more than 30ms late rendering the frame.
@@ -121,9 +114,7 @@ Compute how many microseconds it is until the buffer's presentation time.
     }
 ```
 
-时间超过30ms丢弃
-
-
+在指定条件下渲染视频
 ```java
     if (Util.SDK_INT >= 21) {
       // Let the underlying framework time the release.
@@ -150,7 +141,6 @@ Compute how many microseconds it is until the buffer's presentation time.
     }
 ```
 
-在指定条件下渲染视频
 
 
 
