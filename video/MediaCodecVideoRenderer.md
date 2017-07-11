@@ -23,7 +23,18 @@ crop-top | 裁剪上侧
     }
 ```
 
+界面不渲染这段数据
 
-
+```
+    if (!renderedFirstFrame) {
+      if (Util.SDK_INT >= 21) {
+        renderOutputBufferV21(codec, bufferIndex, System.nanoTime());
+      } else {
+        renderOutputBuffer(codec, bufferIndex);
+      }
+      return true;
+    }
+```
+渲染第一帧视频
 
 
