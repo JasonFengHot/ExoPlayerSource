@@ -12,6 +12,16 @@ crop-top | 裁剪上侧
 **1920, 1600, 1440, 1280, 960, 854, 640, 540, 480**
 
 
+#### protected boolean processOutputBuffer(long positionUs, long elapsedRealtimeUs, MediaCodec codec, ByteBuffer buffer, int bufferIndex, int bufferFlags, long bufferPresentationTimeUs,boolean shouldSkip)
+
+![processOutputBuffer](../images/MediaCodecVideoRenderer_processOutputBuffer.png)
+
+```
+    if (shouldSkip) {
+      skipOutputBuffer(codec, bufferIndex);
+      return true;
+    }
+```
 
 
 
