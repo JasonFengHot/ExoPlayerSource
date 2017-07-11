@@ -38,7 +38,7 @@ crop-top | 裁剪上侧
 
 渲染第一帧视频
 
-**TargetApi < 21**
+##### TargetApi < 21
 
 `public final void releaseOutputBuffer(int index, boolean render)`
 
@@ -50,7 +50,7 @@ index	int: The index of a client-owned output buffer previously returned from a 
 
 render	boolean: If a valid surface was specified when configuring the codec, passing true renders this output buffer to the surface.
 
-**TargetApi >= 21**
+##### TargetApi >= 21
 
 `public final void releaseOutputBuffer(int index, long renderTimestampNs)`
 
@@ -61,11 +61,17 @@ The timestamp may have special meaning depending on the destination surface.
 **SurfaceView specifics**
 
 If you render your buffer on a SurfaceView, you can use the timestamp to render the buffer at a specific time (at the VSYNC at or after the buffer timestamp). For this to work, the timestamp needs to be reasonably close to the current nanoTime(). Currently, this is set as within one (1) second. A few notes:
-the buffer will not be returned to the codec until the timestamp has passed and the buffer is no longer used by the Surface.
-buffers are processed sequentially, so you may block subsequent buffers to be displayed on the Surface. This is important if you want to react to user action, e.g. stop the video or seek.
-if multiple buffers are sent to the Surface to be rendered at the same VSYNC, the last one will be shown, and the other ones will be dropped.
-if the timestamp is not "reasonably close" to the current system time, the Surface will ignore the timestamp, and display the buffer at the earliest feasible time. In this mode it will not drop frames.
-for best performance and quality, call this method when you are about two VSYNCs' time before the desired render time. For 60Hz displays, this is about 33 msec.
+
+>the buffer will not be returned to the codec until the timestamp has passed and the buffer is no longer used by the Surface.
+
+>buffers are processed sequentially, so you may block subsequent buffers to be displayed on the Surface. This is important if you want to react to user action, e.g. stop the video or seek.
+
+>if multiple buffers are sent to the Surface to be rendered at the same VSYNC, the last one will be shown, and the other ones will be dropped.
+
+>if the timestamp is not "reasonably close" to the current system time, the Surface will ignore the timestamp, and display the buffer at the earliest feasible time. In this mode it will not drop frames.
+
+>for best performance and quality, call this method when you are about two VSYNCs' time before the desired render time. For 60Hz displays, this is about 33 msec.
+
 Once an output buffer is released to the codec, it MUST NOT be used until it is later retrieved by getOutputBuffer(int) in response to a dequeueOutputBuffer(MediaCodec.BufferInfo, long) return value or a onOutputBufferAvailable(MediaCodec, int, MediaCodec.BufferInfo) callback.
 
 **Parameters**
