@@ -80,6 +80,82 @@ index	int: The index of a client-owned output buffer previously returned from a 
 
 renderTimestampNs	long: The timestamp to associate with this buffer when it is sent to the Surface.
 
+在渲染第一帧的时候，Api21之前和之后有些区别
+
+
+`long elapsedSinceStartOfLoopUs = (SystemClock.elapsedRealtime() * 1000) - elapsedRealtimeUs;`
+
+Compute how many microseconds it is until the buffer's presentation time.
+
+计算从视频解码到图像呈现一共花了多长时间
+
+`long earlyUs = bufferPresentationTimeUs - positionUs - elapsedSinceStartOfLoopUs;`
+
+用pts减去当前视频位置，再减去解码花的时间
+
+
+```
+    // Compute the buffer's desired release time in nanoseconds.
+    long systemTimeNs = System.nanoTime();
+    long unadjustedFrameReleaseTimeNs = systemTimeNs + (earlyUs * 1000);
+```
+
+视频图像呈现的时间
+
+
+```
+    // Apply a timestamp adjustment, if there is one.
+    long adjustedReleaseTimeNs = frameReleaseTimeHelper.adjustReleaseTime(
+        bufferPresentationTimeUs, unadjustedFrameReleaseTimeNs);
+    earlyUs = (adjustedReleaseTimeNs - systemTimeNs) / 1000;
+```
+
+对时间矫正
+
+
+```
+    if (shouldDropOutputBuffer(earlyUs, elapsedRealtimeUs)) {
+      // We're more than 30ms late rendering the frame.
+      dropOutputBuffer(codec, bufferIndex);
+      return true;
+    }
+```
+
+时间超过30ms丢弃
+
+
+```
+    if (Util.SDK_INT >= 21) {
+      // Let the underlying framework time the release.
+      if (earlyUs < 50000) {
+        renderOutputBufferV21(codec, bufferIndex, adjustedReleaseTimeNs);
+        return true;
+      }
+    } else {
+      // We need to time the release ourselves.
+      if (earlyUs < 30000) {
+        if (earlyUs > 11000) {
+          // We're a little too early to render the frame. Sleep until the frame can be rendered.
+          // Note: The 11ms threshold was chosen fairly arbitrarily.
+          try {
+            // Subtracting 10000 rather than 11000 ensures the sleep time will be at least 1ms.
+            Thread.sleep((earlyUs - 10000) / 1000);
+          } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+          }
+        }
+        renderOutputBuffer(codec, bufferIndex);
+        return true;
+      }
+    }
+```
+
+在指定条件下渲染视频
+
+
+
+
+
 
 
 
