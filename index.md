@@ -37,5 +37,16 @@
 
 ## 解码,渲染
 [MediaCodecVideoRenderer](/video/MediaCodecVideoRenderer.md)
+[MediaCodecAudioRenderer](/audio/MediaCodecAudioRenderer.md)
+
+
+## 整体播放流程
+![paly](/images/player_setPlayWhenReady.png)
+
+![PlayWhenReady](/images/playWhenReady.png)
+
+
+
+
 
 
